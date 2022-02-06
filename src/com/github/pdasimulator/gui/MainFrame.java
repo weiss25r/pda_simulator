@@ -5,6 +5,8 @@ import com.github.pdasimulator.automaton.State;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class MainFrame extends JFrame {
     //panels
@@ -39,6 +41,9 @@ public class MainFrame extends JFrame {
     private final JMenu fileMenu = new JMenu("File");
     private final JMenuItem saveMenuItem = new JMenuItem("Save");
     private final JMenuItem loadMenuItem = new JMenuItem("Load");
+
+    private Set<State> stateSet = new LinkedHashSet<>();
+    private Automaton pda;
 
     public MainFrame() {
         super("PDA simulator");
