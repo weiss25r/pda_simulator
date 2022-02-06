@@ -1,7 +1,7 @@
-package tcsproject.pda;
+package com.github.pdasimulator.automaton;
 
-import java.util.Map.Entry;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
 // Models a PDA state.
@@ -35,6 +35,7 @@ public class State {
     public Map<String, Set<State>> getSuccessors() {
         return new HashMap<>(successors);
     }
+
 
     public void addTransition(char input, char stackPeek, State nextState, String toPush) {
         StringBuilder str = new StringBuilder();

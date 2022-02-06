@@ -1,8 +1,5 @@
-package tcsproject.pda;
+package com.github.pdasimulator.automaton;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 public class Main {
@@ -20,7 +17,6 @@ public class Main {
         q1.addTransition('l', 'Z', q2, "Z");
 
         Automaton pda = new Automaton(Set.of(q0, q1, q2), 'Z', "s", 'l');
-        System.out.println(pda.run("aaaaaabbbbbb"));
-
+        System.out.println(pda.run("aaaabbbb"));
     }
 }

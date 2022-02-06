@@ -1,4 +1,4 @@
-package tcsproject.pda;
+package com.github.pdasimulator.automaton;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -37,16 +37,14 @@ public class Automaton {
                 .getSuccessors()
                 .keySet()
                 .stream()
-                .filter(s->s.startsWith(Character.toString(emptyStringSymbol) + peek))
-                .collect(Collectors.toList());
+                .filter(s -> s.startsWith(Character.toString(emptyStringSymbol) + peek)).toList();
 
         List<String> otherTransitions = currentState
                 .getSuccessors()
                 .keySet()
                 .stream()
-                .filter(s-> input.length() > 0 && (s.startsWith(input.charAt(0) + Character.toString(peek)) ||
-                                s.startsWith(input.charAt(0) + Character.toString(emptyStringSymbol))))
-                .collect(Collectors.toList());
+                .filter(s -> input.length() > 0 && (s.startsWith(input.charAt(0) + Character.toString(peek)) ||
+                        s.startsWith(input.charAt(0) + Character.toString(emptyStringSymbol)))).toList();
 
         //base case
         if(epsilonTransitions.isEmpty() && otherTransitions.isEmpty() && input.equals(""))
