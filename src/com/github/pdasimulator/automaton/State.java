@@ -41,7 +41,7 @@ public class State {
         StringBuilder str = new StringBuilder();
         str.append(input);
         str.append(stackPeek);
-        str.append(toPush);
+        str.append(new StringBuilder(toPush).reverse());
 
         if(this.successors.containsKey(str.toString())) {
             this.successors.get(str.toString()).add(nextState);

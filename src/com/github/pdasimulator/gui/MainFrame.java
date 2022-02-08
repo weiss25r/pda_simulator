@@ -60,6 +60,7 @@ public class MainFrame extends JFrame {
         this.setSize(new Dimension(550, 550));
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setResizable(false);
         this.setVisible(true);
     }
 
@@ -86,7 +87,6 @@ public class MainFrame extends JFrame {
         statesPanel.setBorder(BorderFactory.createTitledBorder("States"));
         centerPanel.add(transitionsPanel, BorderLayout.EAST);
         this.mainPanel.add(centerPanel, BorderLayout.CENTER);
-
     }
 
     private void setMenu() {

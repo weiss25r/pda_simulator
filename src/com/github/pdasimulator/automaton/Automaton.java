@@ -48,7 +48,7 @@ public class Automaton {
 
         //base case
         if(epsilonTransitions.isEmpty() && otherTransitions.isEmpty() && input.equals(""))
-            return currentState.isTerminal();
+            return acceptMode.equals("s") ? this.stack.isEmpty() : currentState.isTerminal();
 
         LinkedList<Character> actualStack = new LinkedList<>(this.stack);
         boolean result = false;
