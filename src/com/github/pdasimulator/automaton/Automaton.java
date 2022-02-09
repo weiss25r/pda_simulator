@@ -1,7 +1,6 @@
 package com.github.pdasimulator.automaton;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Automaton {
     private final Set<State> states;
@@ -22,12 +21,12 @@ public class Automaton {
     public boolean run(String input) {
         List<Character> startingStack = new LinkedList<>(this.stack);
         State initialState = states.stream().filter(State::isInitial).findFirst().get();
-        boolean result = runRecursive(input, initialState);
+        boolean result = runHelper(input, initialState);
         this.stack = new LinkedList<>(startingStack);
         return result;
     }
 
-    private boolean runRecursive(String input, State currentState) {
+    private boolean runHelper(String input, State currentState) {
         //base case
         //input == 0 && there are no epsilon transitions
         char peek = pop();
@@ -68,7 +67,7 @@ public class Automaton {
                 }
 
                 String newInput = input.length() > 1 ? input.substring(1) : "";
-                result = runRecursive(newInput, s);
+                result = runHelper(newInput, s);
                 this.stack = new LinkedList<>(actualStack);
             }
         }
@@ -88,7 +87,7 @@ public class Automaton {
                         stack.push(toPush[i]);
                 }
 
-                result = runRecursive(input, s);
+                result = runHelper(input, s);
                 this.stack = new LinkedList<>(actualStack);
             }
         }

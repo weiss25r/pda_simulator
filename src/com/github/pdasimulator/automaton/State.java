@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 // Models a PDA state.
 //
  */
+
 public class State {
     private final String label;
     private final boolean initial, terminal;
@@ -36,7 +37,6 @@ public class State {
         return new HashMap<>(successors);
     }
 
-
     public void addTransition(char input, char stackPeek, State nextState, String toPush) {
         StringBuilder str = new StringBuilder();
         str.append(input);
@@ -52,6 +52,13 @@ public class State {
             newSet.add(nextState);
             this.successors.put(str.toString(), newSet);
         }
+    }
+
+    //TODO: equals, hashCode, toString
+
+    @Override
+    public String toString() {
+        return this.label + (initial ? ": initial" : terminal ? ": final" : "");
     }
 
 }
