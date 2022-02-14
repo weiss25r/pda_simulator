@@ -118,12 +118,14 @@ public class MainFrame extends JFrame {
             comboBox.addItem("Transition");
             comboBox.setSelectedIndex(0);
 
-            JOptionPane.showMessageDialog(null, comboBox, "Select an option", JOptionPane.QUESTION_MESSAGE);
+            JOptionPane.showConfirmDialog(null, comboBox, "Select an option", JOptionPane.QUESTION_MESSAGE);
 
             if (comboBox.getSelectedIndex() == 0) {
                 this.addState();
             } else this.addTransition();
         });
+
+
     }
 
     private void addState() {
@@ -164,6 +166,28 @@ public class MainFrame extends JFrame {
     }
 
     private void addTransition() {
+        JPanel[] panels = new JPanel[6];
+        JComboBox<State> stateJComboBox = new JComboBox<>();
+        JComboBox<State> secondStateComboBox = new JComboBox<>();
+        JTextField inputCharTxt = new JTextField(10);
+        JTextField inputStackTopTxt = new JTextField(10);
+        JTextField outputStackTopTxt = new JTextField(10);
+        JLabel inputCharLbl = new JLabel("Input char: ");
+        JLabel inputStateLbl = new JLabel("Input state: ");
+        JLabel outputStateLbl = new JLabel("Output state: ");
+        JLabel inputStackTopLbl = new JLabel("Stack top: ");
+        JLabel outputStackTopLbl = new JLabel("Characters to push: ");
+        JButton addEmptyStringSymbol = new JButton("Add lambda");
+
+        for(State s : stateSet) {
+            stateJComboBox.addItem(s);
+        }
+
+        panels[0] = new JPanel();
+        panels[0].add(inputStateLbl);
+        panels[0].add(stateJComboBox);
+
+
     }
 
     public static void main(String[] args) {

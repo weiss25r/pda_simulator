@@ -27,8 +27,6 @@ public class Automaton {
     }
 
     private boolean runHelper(String input, State currentState) {
-        //base case
-        //input == 0 && there are no epsilon transitions
         char peek = pop();
 
         //get epsilon-transition
@@ -72,7 +70,7 @@ public class Automaton {
             }
         }
 
-        if(result) return result;
+        if(result) return true;
 
         for(String key : epsilonTransitions) {
             Set<State> nextStates = currentState.getSuccessors().get(key);
