@@ -118,7 +118,7 @@ public class MainFrame extends JFrame {
             comboBox.addItem("Transition");
             comboBox.setSelectedIndex(0);
 
-            JOptionPane.showConfirmDialog(null, comboBox, "Select an option", JOptionPane.QUESTION_MESSAGE);
+            JOptionPane.showMessageDialog(null, comboBox, "Select an option", JOptionPane.QUESTION_MESSAGE);
 
             if (comboBox.getSelectedIndex() == 0) {
                 this.addState();
@@ -187,6 +187,34 @@ public class MainFrame extends JFrame {
         panels[0].add(inputStateLbl);
         panels[0].add(stateJComboBox);
 
+        panels[1] = new JPanel();
+        panels[1].add(inputCharLbl);
+        panels[1].add(inputCharTxt);
+
+        panels[2] = new JPanel();
+        panels[2].add(inputStackTopLbl);
+        panels[2].add(inputStackTopTxt);
+
+        panels[3] = new JPanel();
+        panels[3].add(outputStateLbl);
+        panels[3].add(secondStateComboBox);
+
+        panels[4] = new JPanel();
+        panels[4].add(outputStackTopLbl);
+        panels[4].add(outputStackTopTxt);
+
+
+        panels[5] = new JPanel(new GridLayout(5,1));
+
+        for(int i = 0; i < panels.length-1; i++)
+            panels[5].add(panels[i], i);
+
+        JOptionPane.showMessageDialog(null, panels[5], "Add transition", JOptionPane.QUESTION_MESSAGE);
+
+        State inputState = (State) stateJComboBox.getSelectedItem();
+        State outputState = (State) secondStateComboBox.getSelectedItem();
+
+        inputState.addTransition(inputCharTxt.getText().charAt(0), inputStackTopTxt.getText().charAt(0), outputState, outputStackTopTxt.getText());
 
     }
 
