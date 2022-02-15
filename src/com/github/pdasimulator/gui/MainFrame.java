@@ -125,7 +125,10 @@ public class MainFrame extends JFrame {
             } else this.addTransition();
         });
 
-
+        this.runBtn.addActionListener(e -> {
+            Automaton pda = new Automaton(stateSet, 'Z', this.finRb.isSelected() ? "w" : "s", 'l');
+            JOptionPane.showMessageDialog(null, pda.run(inputTxt.getText()));
+        });
     }
 
     private void addState() {
@@ -181,6 +184,7 @@ public class MainFrame extends JFrame {
 
         for(State s : stateSet) {
             stateJComboBox.addItem(s);
+            secondStateComboBox.addItem(s);
         }
 
         panels[0] = new JPanel();
@@ -202,7 +206,6 @@ public class MainFrame extends JFrame {
         panels[4] = new JPanel();
         panels[4].add(outputStackTopLbl);
         panels[4].add(outputStackTopTxt);
-
 
         panels[5] = new JPanel(new GridLayout(5,1));
 
