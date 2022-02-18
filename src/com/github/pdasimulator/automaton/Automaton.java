@@ -36,6 +36,9 @@ public class Automaton {
                 .stream()
                 .filter(s -> s.startsWith(Character.toString(emptyStringSymbol) + peek)).toList();
 
+
+        //what if input.equals("") == true ?
+
         List<String> otherTransitions = currentState
                 .getSuccessors()
                 .keySet()

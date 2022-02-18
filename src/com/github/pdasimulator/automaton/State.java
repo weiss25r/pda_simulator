@@ -54,6 +54,24 @@ public class State {
         }
     }
 
+    public void deleteTransition(String transition) {
+        this.successors.remove(transition);
+    }
+
+    //generated automatically by IntelliJ
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        State state = (State) o;
+        return initial == state.initial && terminal == state.terminal && Objects.equals(label, state.label) && Objects.equals(successors, state.successors);
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
+
     //TODO: equals, hashCode, toString
 
     @Override

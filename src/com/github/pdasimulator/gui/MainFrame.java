@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.jar.JarEntry;
+import java.util.stream.Collectors;
 
 public class MainFrame extends JFrame {
     //panels
@@ -35,6 +35,7 @@ public class MainFrame extends JFrame {
     //run panel
     private final JLabel modeLbl = new JLabel("Accept mode: ");
     private final ButtonGroup rbGroup = new ButtonGroup();
+    //TODO: SHOULD BE COMBOBOX!!!
     private final JRadioButton stackRb = new JRadioButton("Empty stack");
     private final JRadioButton finRb = new JRadioButton("Final state");
     private final JTextField inputTxt = new JTextField(10);
@@ -61,7 +62,8 @@ public class MainFrame extends JFrame {
         setButtonsActionListener();
 
         this.getContentPane().add(mainPanel);
-        this.setSize(new Dimension(550, 550));
+        this.setPreferredSize(new Dimension(550, 550));
+        this.pack();
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setResizable(false);
@@ -90,6 +92,7 @@ public class MainFrame extends JFrame {
         statesList.setModel(statesModel);
         transitionsList.setModel(transitionsModel);
 
+        statesList.setPreferredSize(new Dimension());
         statesPanel.setViewportView(statesList);
         centerPanel.add(statesPanel, BorderLayout.WEST);
         statesPanel.setBorder(BorderFactory.createTitledBorder("States"));
@@ -112,26 +115,57 @@ public class MainFrame extends JFrame {
     }
 
     private void setButtonsActionListener() {
-        this.addBtn.addActionListener(e -> {
-            JComboBox<String> comboBox = new JComboBox<>();
-            comboBox.addItem("State");
-            comboBox.addItem("Transition");
-            comboBox.setSelectedIndex(0);
+        JComboBox<String> comboBox = new JComboBox<>();
+        comboBox.addItem("State");
+        comboBox.addItem("Transition");
+        comboBox.setSelectedIndex(0);
 
-            JOptionPane.showMessageDialog(null, comboBox, "Select an option", JOptionPane.QUESTION_MESSAGE);
+        //"add" button
+        this.addBtn.addActionListener(e -> {
+            JOptionPane.showConfirmDialog(null, comboBox, "Select an option", JOptionPane.OK_CANCEL_OPTION);
 
             if (comboBox.getSelectedIndex() == 0) {
-                this.addState();
-            } else this.addTransition();
+                this.addStateHelper();
+            } else this.addTransitionHelper();
         });
 
         this.runBtn.addActionListener(e -> {
             Automaton pda = new Automaton(stateSet, 'Z', this.finRb.isSelected() ? "w" : "s", 'l');
             JOptionPane.showMessageDialog(null, pda.run(inputTxt.getText()));
         });
+
+        //"modify" button
+        this.modifyBtn.addActionListener(e -> {
+            JOptionPane.showConfirmDialog(null, comboBox, "Select an option", JOptionPane.OK_CANCEL_OPTION);
+        });
+
+        //"delete" button
+        this.deleteBtn.addActionListener(e -> {
+            JOptionPane.showConfirmDialog(null, comboBox, "Select an option", JOptionPane.OK_CANCEL_OPTION);
+
+            if(comboBox.getSelectedIndex() == 0) {
+                State stateToDelete = this.statesModel.remove(this.statesList.getSelectedIndex());
+                this.stateSet.remove(stateToDelete);
+            }
+            else {
+                //"(a, b, c) = (d, e)"
+                String transitionToDelete = this.transitionsModel.remove(this.transitionsList.getSelectedIndex());
+                String inputStateLbl = transitionToDelete.substring(1, transitionToDelete.indexOf(","));
+                String outputSubstring = transitionToDelete.substring(transitionToDelete.indexOf("= ") + 2);
+                String outputStateLbl = outputSubstring.substring(1, outputSubstring.indexOf(","));
+                System.out.printf("%s\n%s\n%s\n%s\n", transitionToDelete, inputStateLbl, outputSubstring, outputStateLbl);
+
+                //TODO: funziona?
+                String transition = inputStateLbl.replaceAll("[(),= ]", "").replaceAll(inputStateLbl, "")
+                        .replaceAll(outputStateLbl, "");
+
+                stateSet.stream().filter(s -> s.getLabel().equals(inputStateLbl)).findFirst().get().deleteTransition(transition);
+            }
+        });
+
     }
 
-    private void addState() {
+    private void addStateHelper() {
         JPanel panel = new JPanel(new BorderLayout());
         JPanel firstPanel = new JPanel();
         JPanel secondPanel = new JPanel();
@@ -161,14 +195,14 @@ public class MainFrame extends JFrame {
 
         //TODO: catch exceptions
 
-        JOptionPane.showMessageDialog(null, panel, "Add state", JOptionPane.QUESTION_MESSAGE);
+        JOptionPane.showConfirmDialog(null, panel, "Add state", JOptionPane.OK_CANCEL_OPTION);
 
         State s = new State(nameTxt.getText(), initialRb.isSelected(), finalRb.isSelected());
         stateSet.add(s);
         statesModel.addElement(s);
     }
 
-    private void addTransition() {
+    private void addTransitionHelper() {
         JPanel[] panels = new JPanel[6];
         JComboBox<State> stateJComboBox = new JComboBox<>();
         JComboBox<State> secondStateComboBox = new JComboBox<>();
@@ -180,6 +214,7 @@ public class MainFrame extends JFrame {
         JLabel outputStateLbl = new JLabel("Output state: ");
         JLabel inputStackTopLbl = new JLabel("Stack top: ");
         JLabel outputStackTopLbl = new JLabel("Characters to push: ");
+        //TODO: add this button
         JButton addEmptyStringSymbol = new JButton("Add lambda");
 
         for(State s : stateSet) {
@@ -219,6 +254,9 @@ public class MainFrame extends JFrame {
 
         inputState.addTransition(inputCharTxt.getText().charAt(0), inputStackTopTxt.getText().charAt(0), outputState, outputStackTopTxt.getText());
 
+        transitionsModel.addElement("(" + inputState.getLabel() + ", " + inputCharTxt.getText() +
+                ", " + inputStackTopTxt.getText() + ") = (" + outputState.getLabel() + ", " +
+                outputStackTopTxt.getText() + ")") ;
     }
 
     public static void main(String[] args) {
